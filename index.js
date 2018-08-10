@@ -8,10 +8,14 @@ const crypto = require('crypto')
 const Promise = require('bluebird')
 const sqs = require('sqs')
 
-const { AUTH, SQS_SUFFIX, EVENTS_SOURCE } = process.env
+const { AUTH, SQS_SUFFIX, PROVIDER } = process.env
 
-if (! AUTH || ! SQS_SUFFIX || ! EVENTS_SOURCE) {
+if (! AUTH || ! SQS_SUFFIX || ! PROVIDER) {
   throw new Error('Missing config')
+}
+
+if (PROVIDER !== 'sendgrid' && PROVIDER !== 'socketlabs') { 
+  throw new Error('Only the following providers are supported: sendgrid, socketlabs')
 }
 
 const AUTH_HASH = createHash(AUTH).split('')
@@ -83,7 +87,7 @@ async function processEvents (events) {
   )
 }
 
-const marshallEvent = require(`./${EVENTS_SOURCE}`)
+const marshallEvent = require(`./${PROVIDER}`)
 
 function sendEvent (event) {
   return SQS_CLIENT.pushAsync(QUEUES[event.notificationType], event)
