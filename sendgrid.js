@@ -131,4 +131,6 @@ function marshallComplaintEvent (event, timestamp) {
   }
 }
 
-exports = module.exports = marshallEvent
+exports = module.exports = {
+  marshallEvent
+}

@@ -5,6 +5,7 @@
 'use strict'
 
 const crypto = require('crypto')
+const qs = require('qs')
 const Promise = require('bluebird')
 const sqs = require('sqs')
 
@@ -14,9 +15,16 @@ if (! AUTH || ! SQS_SUFFIX || ! PROVIDER) {
   throw new Error('Missing config')
 }
 
-if (PROVIDER !== 'sendgrid' && PROVIDER !== 'socketlabs') { 
-  throw new Error('Only the following providers are supported: sendgrid, socketlabs')
+const ACCEPTED_PROVIDERS = [
+  'sendgrid',
+  'socketlabs'
+]
+
+if (! ACCEPTED_PROVIDERS.includes(PROVIDER)) { 
+  throw new Error(`Only the following providers are supported: ${ACCEPTED_PROVIDERS.join(', ')}`)
 }
+
+const provider = require(`./${PROVIDER}`)
 
 const AUTH_HASH = createHash(AUTH).split('')
 
@@ -45,11 +53,19 @@ async function main (data) {
         }
       }
 
-      data = JSON.parse(data.body)
+      if (data.headers && data.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+        data = qs.parse(data.body)
+      } else {
+        data = JSON.parse(data.body)
+      }
     }
 
     if (! Array.isArray(data)) {
       data = [ data ]
+    }
+    
+    if (PROVIDER === 'socketlabs' && provider.shouldValidate(data[0])) {
+      return provider.validationResponse()
     }
 
     let results = await processEvents(data)
@@ -81,13 +97,11 @@ function createHash (value) {
 
 async function processEvents (events) {
   return Promise.all(
-    events.map(marshallEvent)
+    events.map(provider.marshallEvent)
       .filter(event => !! event)
       .map(sendEvent)
   )
 }
-
-const marshallEvent = require(`./${PROVIDER}`)
 
 function sendEvent (event) {
   return SQS_CLIENT.pushAsync(QUEUES[event.notificationType], event)

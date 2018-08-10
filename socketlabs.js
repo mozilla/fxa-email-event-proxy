@@ -2,6 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, you can obtain one at https://mozilla.org/MPL/2.0/.
 
+// SocketLabs specific variables
+const { VALIDATION_KEY, SECRET_KEY } = process.env
+
+if (! VALIDATION_KEY || ! SECRET_KEY) {
+  throw new Error("Missing SocketLabs config")
+}
+
 const EVENTS = {
   VALIDATION: 'Validation',
   COMPLAINT: 'Complaint',
@@ -9,13 +16,28 @@ const EVENTS = {
   DELIVERED: 'Delivered'
 }
 
-function marshallEvent (event) {
-  if (event.Type === EVENTS.VALIDATION) {
-    console.log('Still have to figure this one out.')
-    return
+function shouldValidate (event) {
+  if (event.Type !== "Validation") {
+    return false
   }
 
-  if (! event || ! event.Address || ! event.DateTime || ! event.Type) {
+  if (event.SecretKey !== SECRET_KEY) {
+    throw new Error("Invalid Secret Key")
+  }
+
+  return true
+}
+
+function validationResponse () {
+  return {
+    statusCode: 200,
+    body: VALIDATION_KEY,
+    isBase64Encoded: false
+  }
+}
+
+function marshallEvent (event) {
+  if (! event || ! event.Address || ! event.DateTime || ! event.Type || ! event.MessageId || event.SecretKey !== SECRET_KEY) {
     return
   }
 
@@ -76,7 +98,7 @@ function mapFailureCodeToBounceTypes (failureCode) {
     case 2999:
       return [ 'Permanent', 'NoEmail' ]
     case 3001:
-      return [ 'Transitent', 'MailboxFull' ]
+      return [ 'Transient', 'MailboxFull' ]
     case 9999:
       return [ 'Undetermined', 'Undetermined' ]
     default:
@@ -108,4 +130,8 @@ function marshallComplaintEvent (event, timestamp) {
   }
 }
 
-exports = module.exports = marshallEvent
+exports = module.exports = {
+  shouldValidate,
+  validationResponse,
+  marshallEvent
+}
