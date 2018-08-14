@@ -469,7 +469,7 @@ suite('sendgrid:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '"Processed 9 events"',
+          body: '{"result":"Processed 9 events"}',
           isBase64Encoded: false
         }))
       })
@@ -485,7 +485,7 @@ suite('sendgrid:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 500,
-          body: 'Internal Server Error',
+          body: '{"error":"Internal Server Error","errno":999,"code":500,"message":"Unspecified error"}',
           isBase64Encoded: false
         }))
       })
@@ -566,7 +566,7 @@ suite('sendgrid:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 401,
-        body: 'Unauthorized',
+        body: '{"error":"Unauthorized","errno":999,"code":401,"message":"Request must provide a valid auth query param."}',
         isBase64Encoded: false
       }))
     })
@@ -600,7 +600,7 @@ suite('sendgrid:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 401,
-        body: 'Unauthorized',
+        body: '{"error":"Unauthorized","errno":999,"code":401,"message":"Request must provide a valid auth query param."}',
         isBase64Encoded: false
       }))
     })

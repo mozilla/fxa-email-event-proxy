@@ -94,7 +94,7 @@ suite('socketlabs:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '"Processed 1 events"',
+          body: '{"result":"Processed 1 events"}',
           isBase64Encoded: false
         }))
       })
@@ -159,7 +159,7 @@ suite('socketlabs:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '"Processed 1 events"',
+          body: '{"result":"Processed 1 events"}',
           isBase64Encoded: false
         }))
       })
@@ -226,7 +226,7 @@ suite('socketlabs:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '"Processed 1 events"',
+          body: '{"result":"Processed 1 events"}',
           isBase64Encoded: false
         }))
       })
@@ -305,7 +305,7 @@ suite('socketlabs:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 500,
-        body: 'Internal Server Error',
+        body: '{"error":"Internal Server Error","errno":999,"code":500,"message":"Invalid Secret Key"}',
         isBase64Encoded: false
       }))
     })
@@ -338,7 +338,7 @@ suite('socketlabs:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 200,
-        body: '"Processed 0 events"',
+        body: '{"result":"Processed 0 events"}',
         isBase64Encoded: false
       }))
     })
@@ -371,7 +371,7 @@ suite('socketlabs:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 200,
-        body: '"Processed 0 events"',
+        body: '{"result":"Processed 0 events"}',
         isBase64Encoded: false
       }))
     })

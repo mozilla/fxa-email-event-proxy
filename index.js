@@ -46,9 +46,15 @@ async function main (data) {
     if (data.body) {
       // Requests from the API gateway must be authenticated
       if (! data.queryStringParameters || ! authenticate(data.queryStringParameters.auth)) {
+        const errorResponse = { 
+          error: 'Unauthorized', 
+          errno: 999,
+          code: 401,
+          message: 'Request must provide a valid auth query param.'
+        }
         return {
           statusCode: 401,
-          body: 'Unauthorized',
+          body: JSON.stringify(errorResponse),
           isBase64Encoded: false
         }
       }
@@ -69,15 +75,24 @@ async function main (data) {
     }
 
     let results = await processEvents(data)
+    let response = { 
+      result: `Processed ${results.length} events` 
+    }
     return {
       statusCode: 200,
-      body: JSON.stringify(`Processed ${results.length} events`),
+      body: JSON.stringify(response),
       isBase64Encoded: false
     }
   } catch(error) {
+    const errorResponse = { 
+      error: 'Internal Server Error', 
+      errno: 999,
+      code: 500,
+      message: error && error.message ? error.message : 'Unspecified error'
+    }
     return {
       statusCode: 500,
-      body: 'Internal Server Error',
+      body: JSON.stringify(errorResponse),
       isBase64Encoded: false
     }
   }
