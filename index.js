@@ -71,7 +71,7 @@ async function main (data) {
     let results = await processEvents(data)
     return {
       statusCode: 200,
-      body: `Processed ${results.length} events`,
+      body: JSON.stringify(`Processed ${results.length} events`),
       isBase64Encoded: false
     }
   } catch(error) {

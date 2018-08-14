@@ -14,18 +14,19 @@ const { assert } = chai
 
 /* eslint-env mocha */
 
-suite('fxa-sendgrid-event-proxy:', () => {
+suite('sendgrid:', () => {
   let sqs, proxy
 
   setup(() => {
     process.env.AUTH = 'authentication string'
+    process.env.PROVIDER = 'sendgrid'
     process.env.SQS_SUFFIX = 'wibble'
     sqs = {
       push: sinon.spy()
     }
     sinon.spy(console, 'log')
     sinon.spy(console, 'error')
-    proxy = proxyquire('.', {
+    proxy = proxyquire('../', {
       sqs: () => sqs
     })
   })
@@ -468,7 +469,7 @@ suite('fxa-sendgrid-event-proxy:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: 'Processed 9 events',
+          body: '\"Processed 9 events\"',
           isBase64Encoded: false
         }))
       })
