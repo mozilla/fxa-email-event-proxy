@@ -6,7 +6,7 @@
 const { VALIDATION_KEY, SECRET_KEY } = process.env
 
 if (! VALIDATION_KEY || ! SECRET_KEY) {
-  throw new Error("Missing SocketLabs config")
+  throw new Error('Missing SocketLabs config')
 }
 
 const EVENTS = {
@@ -17,12 +17,12 @@ const EVENTS = {
 }
 
 function shouldValidate (event) {
-  if (event.Type !== "Validation") {
+  if (event.Type !== 'Validation') {
     return false
   }
 
   if (event.SecretKey !== SECRET_KEY) {
-    throw new Error("Invalid Secret Key")
+    throw new Error('Invalid Secret Key')
   }
 
   return true

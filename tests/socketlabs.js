@@ -94,7 +94,7 @@ suite('socketlabs:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '\"Processed 1 events\"',
+          body: '"Processed 1 events"',
           isBase64Encoded: false
         }))
       })
@@ -159,7 +159,7 @@ suite('socketlabs:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '\"Processed 1 events\"',
+          body: '"Processed 1 events"',
           isBase64Encoded: false
         }))
       })
@@ -208,7 +208,7 @@ suite('socketlabs:', () => {
         },
         complaint: {
           complainedRecipients: [
-            { emailAddress: "test@example.com" }
+            { emailAddress: 'test@example.com' }
           ],
           timestamp: '2012-10-01T14:07:26.000Z',
           feedbackId: '0000000155'
@@ -226,7 +226,7 @@ suite('socketlabs:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '\"Processed 1 events\"',
+          body: '"Processed 1 events"',
           isBase64Encoded: false
         }))
       })
@@ -338,7 +338,7 @@ suite('socketlabs:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 200,
-        body: '\"Processed 0 events\"',
+        body: '"Processed 0 events"',
         isBase64Encoded: false
       }))
     })
@@ -371,7 +371,7 @@ suite('socketlabs:', () => {
     test('result is correct', () => {
       return promise.then(result => assert.deepEqual(result, {
         statusCode: 200,
-        body: '\"Processed 0 events\"',
+        body: '"Processed 0 events"',
         isBase64Encoded: false
       }))
     })

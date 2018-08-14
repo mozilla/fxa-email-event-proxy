@@ -469,7 +469,7 @@ suite('sendgrid:', () => {
       test('result is correct', () => {
         return promise.then(result => assert.deepEqual(result, {
           statusCode: 200,
-          body: '\"Processed 9 events\"',
+          body: '"Processed 9 events"',
           isBase64Encoded: false
         }))
       })
